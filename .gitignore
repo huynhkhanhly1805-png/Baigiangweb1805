@@ -1,0 +1,9 @@
+# Thư mục chứa các thư viện đã cài đặt (Rất quan trọng!)
+node_modules/
+
+# Logs và Cache
+npm-debug.log
+.DS_Store
+
+# Files cấu hình của IDE (Nếu dùng VS Code)
+.vscode/
