@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bài giảng đã lưu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tilt Neon', sans-serif;
+      margin: 0;
+      background-color: #d8e8ff;
+      height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 200px;
+      background: #f9f9ff;
+      border-right: 2px solid #c9d7f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .sidebar button {
+      width: 160px;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: 0.2s;
+    }
+
+    .sidebar button:hover {
+      background: #d7e2fb;
+    }
+
+    .sidebar .active {
+      background: #bcd1ff;
+      font-weight: bold;
+    }
+    .main {
+      flex: 1;
+      background: #fff;
+      padding: 20px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 2px solid #aac6ff;
+      border-radius: 8px;
+      background: #fff;
+      padding: 5px 10px;
+      width: 400px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .icons {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 22px;
+    }
+    .lecture-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .lecture-item {
+      background: #f5f8ff;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .lecture-item:hover {
+      transform: scale(1.02);
+    }
+
+    .thumb {
+      width: 100%;
+      height: 130px;
+      background: #ccc;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 40px;
+    }
+
+    .lecture-item p {
+      margin: 5px 0;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <button onclick="window.location.href='taobaigiang.html'">+ Tạo bài giảng mới</button>
+    <button class="active">⭐ Bài giảng đã lưu</button>
+    <button onclick="window.location.href='setting.html'">⚙️ Cài đặt</button>
+    <button onclick="logout()">↩️ Đăng xuất</button>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tìm bài giảng...">
+      </div>
+      <div class="icons">
+        🔔 👤
+      </div>
+    </div>
+
+    <h2>📘 Bài giảng đã lưu</h2>
+    <div id="lectureList" class="lecture-grid"></div>
+  </div>
+
+  <script>
+    function loadLectures() {
+      const lectures = JSON.parse(localStorage.getItem("lectures")) || [];
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const list = document.getElementById("lectureList");
+      list.innerHTML = "";
+
+      const filtered = lectures.filter(l => l.title.toLowerCase().includes(search));
+      if (filtered.length === 0) {
+        list.innerHTML = "<p>Không tìm thấy bài giảng nào.</p>";
+        return;
+      }
+
+      filtered.forEach((lec) => {
+        const div = document.createElement("div");
+        div.className = "lecture-item";
+        div.innerHTML = `
+          <div class="thumb">▶</div>
+          <p><strong>${lec.title}</strong></p>
+          <p>Ngày tạo: ${lec.createdAt}</p>
+          <p>Ngày lưu: ${lec.savedAt}</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "dangnhap.html";
+    }
+    document.getElementById("searchInput").addEventListener("input", loadLectures);
+    window.onload = loadLectures;
+  </script>
+
+</body>
+</html>

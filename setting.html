@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cài đặt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue:#cbe4ff; --accent:#003bff; --muted:#efefef; --card:#fff;
+      --page-bg:#dbeffd;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--page-bg);color:#111}
+    .dark-mode {
+      --blue:#2b3a4b; --accent:#9fc5ff; --muted:#3a3a3a; --card:#222;
+      background:#111;
+      color:#eaeaea;
+    }
+    .app{display:flex;height:100vh;overflow:hidden}
+    .sidebar{
+      width:92px;background:#fff;border-right:1px solid #d6d6d6;
+      display:flex;flex-direction:column;align-items:center;padding:14px 8px;gap:10px;
+    }
+    .sb-item{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px}
+    .sb-item.active{background:var(--blue)}
+    .sb-label{font-size:12px;margin-top:4px;text-align:center;color:#333}
+    .sb-spacer{flex:1}
+    .logout{margin-bottom:6px;text-align:center;font-size:14px;cursor:pointer}
+
+    .main{flex:1;display:flex;flex-direction:column}
+    .topbar{display:flex;align-items:center;gap:12px;background:var(--blue);padding:10px 16px;border-bottom:1px solid #d6d6d6}
+    .search{flex:1;display:flex;align-items:center;background:#fff;border:1px solid #d6d6d6;border-radius:8px;padding:6px 10px}
+    .search input{border:0;outline:0;font-size:15px;width:100%}
+    .icons{display:flex;gap:12px;font-size:20px;margin-left:6px}
+
+    .content{flex:1;display:flex;padding:18px;background:transparent}
+    .menu{width:300px;margin-right:18px;background:var(--card);border-radius:8px;box-shadow:0 0 6px rgba(0,0,0,0.06);padding:6px 0;overflow:auto}
+    .menu ul{list-style:none;padding:0;margin:0}
+    .menu li{padding:14px 18px;border-bottom:1px solid var(--muted);font-size:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+    .menu li:hover{background:#f2f8ff}
+    .menu li.active{color:var(--accent);font-weight:700}
+    .display{flex:1;background:var(--card);border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,0.06);padding:20px;overflow:auto;min-height:60vh}
+    .display h2{margin:0 0 12px 0;color:var(--accent)}
+
+    .small{font-size:14px;color:#666}
+    input[type=text], input[type=email], input[type=password], textarea, select{
+      width:100%;padding:8px;border:1px solid #bdbdbd;border-radius:4px;font-size:15px;background:transparent;
+    }
+    .box{border:2px solid #bfbfbf;padding:10px;border-radius:6px;background:var(--card)}
+    .avatar{width:100px;height:100px;border-radius:999px;border:3px solid #444;display:flex;align-items:center;justify-content:center;font-size:42px;margin:8px auto}
+    .section-title{font-weight:700;margin:10px 0}
+    .row{display:flex;gap:12px;align-items:center}
+    .col{flex:1}
+
+    .switch{position:relative;display:inline-block;width:40px;height:20px}
+    .switch input{display:none}
+    .slider{position:absolute;left:0;top:0;right:0;bottom:0;background:#c0c0c0;border-radius:20px;transition:.22s}
+    .slider::before{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.22s}
+    .switch input:checked + .slider{background:#007bff}
+    .switch input:checked + .slider::before{transform:translateX(20px)}
+
+    .modal-back{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:60}
+    .modal{background:var(--blue);padding:14px;border-radius:8px;border:2px solid rgba(0,0,0,0.08);min-width:320px}
+    .modal p{margin:8px 0;color:#07204a}
+    .btn{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+    .btn-primary{background:#2b7bd6;color:#fff}
+    .btn-ghost{background:#fff;border:1px solid #999}
+
+    .stars{display:flex;gap:8px;font-size:24px;cursor:pointer}
+    .note{color:#666;margin-top:10px}
+
+    @media(max-width:900px){ .menu{display:none} .sidebar{display:none} .content{padding:8px} }
+  </style>
+</head>
+<body id="pageBody">
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="sidebar">
+      <div class="sb-item" data-href="#home" title="Trang chủ">🏠</div>
+      <div class="sb-item" onclick='window.location.href="taobaigiang.html"' title="Tạo">➕</div>
+      <div class="sb-item" onclick='window.location.href="baigiangdaluu.html"' title="Bài giảng đã lưu">⭐</div>
+      <div class="sb-item" onclick='window.location.href="setting.html"' title="Cài đặt">⚙️</div>
+      <div class="sb-spacer"></div>
+      <div class="logout" id="logoutBtn" title="Đăng xuất">🔄<div class="sb-label">Đăng xuất</div></div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="search">🔍<input id="searchInput" placeholder="Tìm kiếm cài đặt" /></div>
+        <div class="icons">🔔 👤</div>
+      </div>
+
+      <div class="content">
+        <!-- MENU -->
+        <nav class="menu" aria-label="menu-caidat">
+          <ul>
+            <li data-key="info" class="active">Thông tin tài khoản <span>▶</span></li>
+            <li data-key="giao">Cài đặt giao diện <span>▶</span></li>
+            <li data-key="thongbao">Cài đặt thông báo <span>▶</span></li>
+            <li data-key="hotro">Hỗ trợ <span>▶</span></li>
+            <li data-key="them">Thêm tài khoản <span>▶</span></li>
+            <li data-key="chuyen">Chuyển đổi tài khoản <span>▶</span></li>
+            <li data-key="feedback">Phản hồi & Đánh giá <span>▶</span></li>
+          </ul>
+        </nav>
+
+        <!-- DISPLAY AREA -->
+        <section class="display" id="display">
+          <!-- injected content -->
+        </section>
+      </div>
+    </main>
+
+    <aside style="width:80px;background:var(--blue)"></aside>
+  </div>
+
+  <!-- modal root -->
+  <div id="modalRoot" style="display:none"></div>
+
+  <script>
+    /* ---------- TEMPLATES (10 pages) ---------- */
+    const TEMPLATES = {
+      homepage: `
+        <h2>Trang chủ</h2>
+        <p class="small">Xin chào! Đây là trang chủ demo.</p>
+        <div class="box" style="margin-top:12px">
+          <strong>Bài giảng nổi bật</strong>
+          <p class="small">Ví dụ: Bài giảng AI cơ bản</p>
+        </div>
+      `,
+      login: `
+        <h2>Đăng nhập</h2>
+        <div style="max-width:420px">
+          <label class="small">Tên đăng nhập</label><input id="loginUser" type="text" placeholder="Tên đăng nhập" />
+          <div style="height:8px"></div>
+          <label class="small">Mật khẩu</label><input id="loginPass" type="password" placeholder="Mật khẩu" />
+          <div style="height:12px"></div>
+          <button class="btn btn-primary" id="loginBtn">Đăng nhập</button>
+        </div>
+      `,
+      create: `
+        <h2>Tạo bài giảng (mới)</h2>
+        <div style="max-width:720px">
+          <label class="small">Tiêu đề</label><input id="lesson_title" type="text" placeholder="Tiêu đề..." />
+          <div style="height:8px"></div>
+          <label class="small">Mô tả</label><textarea id="lesson_desc" rows="6" placeholder="Mô tả..."></textarea>
+          <div style="height:8px"></div>
+          <button class="btn btn-primary" id="createLessonBtn">Tạo bài giảng</button>
+        </div>
+      `,
+      settings: `
+        <h2>Cài đặt (tổng quan)</h2>
+        <p class="small">Chọn bên trái để mở chi tiết cài đặt.</p>
+      `,
+      info: `
+        <h2>Thông tin tài khoản</h2>
+        <ul>
+          <li id="t-avatar">Ảnh đại diện <span>▾</span></li>
+          <li id="t-name">Tên tài khoản <span>▾</span></li>
+          <li id="t-mail">Gmail <span>▾</span></li>
+        </ul>
+        <div id="infoDetails" style="margin-top:12px"></div>
+      `,
+      giao: `
+        <h2>Cài đặt giao diện</h2>
+        <ul>
+          <li id="g-mode">Chế độ hiển thị <span>▾</span></li>
+          <li id="g-font">Kiểu chữ / Cỡ chữ <span>▾</span></li>
+          <li id="g-lang">Ngôn ngữ <span>▾</span></li>
+          <li id="g-reset">Khôi phục cài đặt mặc định</li>
+        </ul>
+        <div id="gDetails" style="margin-top:12px"></div>
+      `,
+      thongbao: `
+        <h2>Cài đặt thông báo</h2>
+        <ul>
+          <li>Thông báo của ứng dụng</li>
+          <li>➤ Bài giảng mới <label class="switch"><input id="tb1" type="checkbox" checked><span class="slider"></span></label></li>
+          <li>➤ Bài kiểm tra mới <label class="switch"><input id="tb2" type="checkbox" checked><span class="slider"></span></label></li>
+          <li>Nhật ký thông báo <label class="switch"><input id="tb3" type="checkbox" checked><span class="slider"></span></label></li>
+          <li>Chặn thông báo <label class="switch"><input id="tb4" type="checkbox"><span class="slider"></span></label></li>
+        </ul>
+      `,
+      hotro: `
+        <h2>Hỗ trợ</h2>
+        <ul>
+          <li id="hotro-feat">Các tính năng <span>▾</span></li>
+          <li id="hotro-req">Gửi yêu cầu hỗ trợ <span>▾</span></li>
+          <li id="hotro-rate">Đánh giá <span>▾</span></li>
+        </ul>
+        <div id="hotroDetails" style="margin-top:12px"></div>
+      `,
+      them: `
+        <h2>Thêm tài khoản</h2>
+        <div class="box" style="max-width:480px">
+          <label class="small">Tên</label><input id="new_name" type="text" placeholder="Tên" />
+          <div style="height:8px"></div>
+          <label class="small">Gmail</label><input id="new_mail" type="email" placeholder="you@example.com" />
+          <div style="height:8px"></div>
+          <label class="small">Mật khẩu</label><input id="new_pass" type="password" />
+          <div style="height:12px"></div>
+          <button class="btn btn-primary" id="addAccountBtn">Thêm tài khoản</button>
+        </div>
+      `,
+      chuyen: `
+        <h2>Chuyển đổi tài khoản</h2>
+        <div class="box" style="max-width:420px">
+          <div style="display:flex;align-items:center;gap:12px;padding:8px">
+            <div style="width:48px;height:48px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center">N</div>
+            <div>
+              <div style="font-weight:600">NguyenA</div>
+              <div class="small">nguyena@gmail.com</div>
+            </div>
+            <div style="margin-left:auto"><button class="btn btn-ghost" id="switchBtn">Chuyển đến</button></div>
+          </div>
+        </div>
+      `,
+      feedback: `
+        <h2>Phản hồi & Đánh giá</h2>
+        <div style="max-width:520px">
+          <div class="section-title">Gửi yêu cầu hỗ trợ</div>
+          <label class="small">Tên / Gmail</label><input id="fb_name" type="text" placeholder="Tên hoặc Gmail" />
+          <div style="height:8px"></div>
+          <label class="small">Vấn đề bạn gặp phải</label><textarea id="fb_msg" rows="4" placeholder="Mô tả vấn đề..."></textarea>
+          <div style="height:8px"></div>
+          <button class="btn btn-primary" id="fb_send">Gửi</button>
+
+          <div style="height:16px"></div>
+          <div class="section-title">Đánh giá web của chúng tôi</div>
+          <div class="box" style="padding:12px">
+            <div class="stars" id="rating">
+              <span data-star="1">☆</span>
+              <span data-star="2">☆</span>
+              <span data-star="3">☆</span>
+              <span data-star="4">☆</span>
+              <span data-star="5">☆</span>
+            </div>
+            <div class="note">Chọn số sao để đánh giá</div>
+          </div>
+        </div>
+      `
+    };
+
+    /* ---------- CORE (routing + render) ---------- */
+    const display = document.getElementById('display');
+    const menuItems = Array.from(document.querySelectorAll('.menu li'));
+    const sidebarItems = Array.from(document.querySelectorAll('.sb-item'));
+    const modalRoot = document.getElementById('modalRoot');
+    const body = document.getElementById('pageBody');
+
+    function setActiveMenu(key){
+      menuItems.forEach(li => li.classList.toggle('active', li.dataset.key === key));
+    }
+
+    function render(key){
+      const tpl = TEMPLATES[key] || `<h2>Không tìm thấy trang</h2><p class="small">Trang: ${key}</p>`;
+      display.innerHTML = tpl;
+      setActiveMenu(key);
+      attachHandlers(key);
+    }
+
+    // attach events per page
+    function attachHandlers(key){
+      // INFO page
+      if(key === 'info'){
+        const details = document.getElementById('infoDetails');
+        const avatarLi = document.getElementById('t-avatar');
+        const nameLi = document.getElementById('t-name');
+        const mailLi = document.getElementById('t-mail');
+
+        function showAvatar(){
+          details.innerHTML = `<div style="max-width:320px"><div class="section-title">Ảnh đại diện</div><div class="avatar">N</div><div style="text-align:center"><button class="btn btn-ghost" id="chgAvatar">Thay đổi</button></div></div>`;
+          document.getElementById('chgAvatar').addEventListener('click', ()=> alert('Thay ảnh (demo)'));
+        }
+        function showName(){
+          details.innerHTML = `<div style="max-width:420px"><div class="section-title">Tên tài khoản</div><input id="acc_name" type="text" value="NguyenA" /><div style="height:8px"></div><button class="btn btn-primary" id="saveName">Lưu</button></div>`;
+          document.getElementById('saveName').addEventListener('click', ()=> alert('Đã lưu: ' + document.getElementById('acc_name').value));
+        }
+        function showMail(){
+          details.innerHTML = `<div style="max-width:420px"><div class="section-title">Gmail</div><input id="acc_mail" type="email" value="nguyenvana@gmail.com" /><div style="height:8px"></div><button class="btn btn-primary" id="saveMail">Lưu</button></div>`;
+          document.getElementById('saveMail').addEventListener('click', ()=> alert('Đã lưu: ' + document.getElementById('acc_mail').value));
+        }
+
+        avatarLi.addEventListener('click', showAvatar);
+        nameLi.addEventListener('click', showName);
+        mailLi.addEventListener('click', showMail);
+      }
+
+      // GIAO page
+      if(key === 'giao'){
+        const gDetails = document.getElementById('gDetails');
+        const modeLi = document.getElementById('g-mode');
+        const fontLi = document.getElementById('g-font');
+        const langLi = document.getElementById('g-lang');
+        const resetLi = document.getElementById('g-reset');
+
+        function showMode(){
+          gDetails.innerHTML = `<div class="box"><div class="section-title">Chế độ hiển thị</div>
+            <label><input type="radio" name="theme" value="light"> Sáng</label><br>
+            <label><input type="radio" name="theme" value="dark"> Tối</label><br>
+            <label><input type="radio" name="theme" value="auto"> Tự động</label>
+            </div>`;
+          const radios = gDetails.querySelectorAll('input[name="theme"]');
+          radios.forEach(r => r.addEventListener('change', ()=> applyTheme(r.value)));
+          // select saved
+          const saved = localStorage.getItem('theme') || 'light';
+          const sel = gDetails.querySelector(`input[value="${saved}"]`);
+          if(sel) sel.checked = true;
+        }
+        function showFont(){
+          gDetails.innerHTML = `<div class="box"><div class="section-title">Kiểu chữ / Cỡ chữ</div>
+            <select id="fontSel"><option value="14">Inter / 14</option><option value="16">Times / 16</option><option value="20">Sansita / 20</option></select></div>`;
+          document.getElementById('fontSel').addEventListener('change', e=> document.documentElement.style.fontSize = (e.target.value/14) + 'px');
+        }
+        function showLang(){
+          gDetails.innerHTML = `<div class="box"><div class="section-title">Ngôn ngữ</div>
+            <select id="langSel"><option value="en">English</option><option value="vi" selected>Tiếng Việt</option></select></div>`;
+          document.getElementById('langSel').addEventListener('change', ()=> alert('Đổi ngôn ngữ (demo)'));
+        }
+        function showReset(){
+          gDetails.innerHTML = `<div style="max-width:420px"><div class="section-title">Khôi phục cài đặt mặc định</div><div class="small">Việc này sẽ xóa dữ liệu cài đặt (demo)</div><div style="height:8px"></div><button class="btn btn-ghost" id="btnReset">Khôi phục</button></div>`;
+          document.getElementById('btnReset').addEventListener('click', ()=> showModal('Bạn chắc chắn muốn khôi phục toàn bộ cài đặt?\\nViệc này sẽ xóa tất cả dữ liệu bạn đã cài đặt.', ()=> { localStorage.removeItem('theme'); alert('Đã khôi phục (demo)'); applyTheme('light'); }));
+        }
+
+        modeLi.addEventListener('click', showMode);
+        fontLi.addEventListener('click', showFont);
+        langLi.addEventListener('click', showLang);
+        resetLi.addEventListener('click', showReset);
+      }
+
+      // THONGBAO page
+      if(key === 'thongbao'){
+        ['tb1','tb2','tb3','tb4'].forEach(id=>{
+          const el = document.getElementById(id);
+          if(el) el.addEventListener('change', ()=> console.log(id, el.checked));
+        });
+      }
+
+      // HOTRO page
+      if(key === 'hotro'){
+        const details = document.getElementById('hotroDetails');
+        const feat = document.getElementById('hotro-feat');
+        const req  = document.getElementById('hotro-req');
+        const rate = document.getElementById('hotro-rate');
+
+        function showFeat(){
+          details.innerHTML = `<div class="section-title">Các tính năng</div><div class="box"><div style="display:flex;gap:12px"><div style="width:60px;height:60px;border-radius:999px;background:#ffdede;display:flex;align-items:center;justify-content:center">GV</div><div><strong>Giáo viên</strong><ul><li>Tạo bài giảng nhanh</li><li>Lưu & chia sẻ</li></ul></div></div></div>`;
+        }
+        function showReq(){
+          details.innerHTML = `<div class="section-title">Gửi yêu cầu hỗ trợ</div><div class="box"><label class="small">Tên/Gmail</label><input id="req_name" type="text" /><div style="height:8px"></div><label class="small">Vấn đề</label><textarea id="req_msg" rows="4"></textarea><div style="height:8px"></div><button class="btn btn-primary" id="req_send">Gửi</button><button class="btn btn-ghost" id="req_cancel">Hủy</button></div>`;
+          document.getElementById('req_send').addEventListener('click', ()=> alert('Đã gửi yêu cầu (demo)'));
+          document.getElementById('req_cancel').addEventListener('click', ()=> details.innerHTML = '');
+        }
+        function showRate(){
+          details.innerHTML = `<div class="section-title">Đánh giá</div><div class="box" style="padding:12px"><div style="font-weight:700">Đánh giá web</div><div style="height:8px"></div><div class="stars" id="hotroStars"><span data-star="1">☆</span><span data-star="2">☆</span><span data-star="3">☆</span><span data-star="4">☆</span><span data-star="5">☆</span></div></div>`;
+          const s = document.getElementById('hotroStars');
+          s.querySelectorAll('span').forEach(el=> el.addEventListener('click', ()=> {
+            const n = +el.dataset.star;
+            s.querySelectorAll('span').forEach(sp => sp.textContent = +sp.dataset.star <= n ? '★' : '☆');
+            alert('Cảm ơn đánh giá ' + n + ' sao!');
+          }));
+        }
+
+        feat.addEventListener('click', showFeat);
+        req.addEventListener('click', showReq);
+        rate.addEventListener('click', showRate);
+      }
+
+      // THEM page
+      if(key === 'them'){
+        const btn = document.getElementById('addAccountBtn');
+        if(btn) btn.addEventListener('click', ()=> {
+          const n = document.getElementById('new_name').value;
+          alert('Đã thêm (demo): ' + n);
+        });
+      }
+
+      // CHUYEN
+      if(key === 'chuyen'){
+        const btn = document.getElementById('switchBtn');
+        if(btn) btn.addEventListener('click', ()=> alert('Đã chuyển (demo)'));
+      }
+
+      // CREATEPAGE
+      if(key === 'createpage'){
+        const btn = document.getElementById('createLessonBtn');
+        if(btn) btn.addEventListener('click', ()=> {
+          const t = document.getElementById('lesson_title').value;
+          alert('Đã tạo (demo): ' + t);
+        });
+      }
+
+      // FEEDBACK
+      if(key === 'feedback'){
+        const send = document.getElementById('fb_send');
+        if(send) send.addEventListener('click', ()=> alert('Đã gửi phản hồi (demo)'));
+        const rating = document.getElementById('rating');
+        if(rating) rating.querySelectorAll('span').forEach(s=> s.addEventListener('click', ()=>{
+          const v = +s.dataset.star;
+          rating.querySelectorAll('span').forEach(sp=> sp.textContent = +sp.dataset.star <= v ? '★' : '☆');
+          alert('Cảm ơn đánh giá ' + v + ' sao!');
+        }));
+      }
+
+      // LOGIN
+      if(key === 'login'){
+        const btn = document.getElementById('loginBtn');
+        if(btn) btn.addEventListener('click', ()=> {
+          const u = document.getElementById('loginUser').value;
+          showModal('Đăng nhập với tài khoản: ' + u, ()=> {
+            alert('Đăng nhập (demo): ' + u);
+            location.hash = 'info';
+          });
+        });
+      }
+
+      // THONGBAO toggles (already in template) - nothing else needed
+    }
+
+    /* ---------- small utilities ---------- */
+    function applyTheme(mode){
+      if(mode === 'auto'){
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.toggle('dark-mode', prefersDark);
+      } else if(mode === 'dark'){
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      localStorage.setItem('theme', mode);
+    }
+
+    // showModal: safe string insertion (no nested template issues)
+    function showModal(message, onConfirm){
+      modalRoot.style.display = 'block';
+      const html = '<div class="modal-back"><div class="modal"><p>' + String(message).replace(/\\n/g, '<br/>') + '</p><div style="display:flex;gap:8px;justify-content:center;margin-top:8px"><button class="btn btn-primary" id="mOk">Chắc chắn</button><button class="btn btn-ghost" id="mCancel">Hủy</button></div></div></div>';
+      modalRoot.innerHTML = html;
+      const ok = document.getElementById('mOk');
+      const cancel = document.getElementById('mCancel');
+      ok.addEventListener('click', ()=> { modalRoot.style.display = 'none'; modalRoot.innerHTML = ''; if(typeof onConfirm === 'function') onConfirm(); });
+      cancel.addEventListener('click', ()=> { modalRoot.style.display = 'none'; modalRoot.innerHTML = ''; });
+    }
+
+    /* ---------- routing & interactions ---------- */
+    // menu click -> hash
+    menuItems.forEach(li => li.addEventListener('click', ()=> location.hash = li.dataset.key));
+    // sidebar icons -> hash
+    sidebarItems.forEach((sb, idx) => sb.addEventListener('click', ()=> {
+      const mapping = ['homepage','login','create','settings','savedpage'];
+      const to = sb.dataset.href || ('#' + (mapping[idx] || 'settings'));
+      location.hash = to.replace('#','');
+    }));
+    document.getElementById('logoutBtn').addEventListener('click', ()=> showModal('Bạn chắc chắn muốn đăng xuất?', ()=> { alert('Đã đăng xuất (demo)'); location.hash = 'login'; }));
+
+    function handleHash(){
+      const key = location.hash.replace('#','') || 'info';
+      render(key);
+      // keep sidebar active heuristics
+      sidebarItems.forEach(si => si.classList.remove('active'));
+      // if page is in settings family -> activate settings icon (index 3)
+      if(['info','giao','thongbao','hotro','them','chuyen','feedback'].includes(key)) {
+        sidebarItems[3] && sidebarItems[3].classList.add('active');
+      } else if(key === 'create' || key === 'createpage') sidebarItems[2] && sidebarItems[2].classList.add('active');
+      else if(key === 'login') sidebarItems[1] && sidebarItems[1].classList.add('active');
+      else sidebarItems[0] && sidebarItems[0].classList.add('active');
+    }
+    window.addEventListener('hashchange', handleHash);
+    // search filter menu
+    document.getElementById('searchInput').addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      menuItems.forEach(li => li.style.display = q && !li.textContent.toLowerCase().includes(q) ? 'none' : '');
+    });
+
+    // initial
+    (function init(){
+      // apply saved theme
+      const saved = localStorage.getItem('theme') || 'light';
+      applyTheme(saved);
+      // ensure initial hash
+      if(!location.hash) location.hash = 'info';
+      handleHash();
+    })();
+  </script>
+</body>
+</html>

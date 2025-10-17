@@ -1,0 +1,656 @@
+<!Doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tạo bài giảng - Mockup</title>
+<style>
+/* ---------------------------------------------------------------------------------- */
+/* CSS STYLES - GIỮ GIAO DIỆN GIỐNG HỆT MOCKUP */
+/* ---------------------------------------------------------------------------------- */
+  html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.right-panel {
+  height: 100vh;
+  width: 50px;
+  overflow: hidden;
+}
+ .image-section img {
+    width: 80px;
+    border-radius: 12px;
+  }
+
+  .icon-round img{
+    width: 70px;
+    border-radius: 12px;
+  }
+
+  :root{
+    --side-width:84px;
+    --right-width:220px;
+    --accent:#cfe9ff;
+    --blue:#cfe1ff;
+    --light:#f6f9fb;
+    --muted:#bfcbd6;
+    --main-bg:#e9f5ff;
+    --primary:#ffffff;
+  }
+  *{box-sizing:border-box;font-family: "Segoe UI", Roboto, Arial, sans-serif}
+  body{margin:0; background:linear-gradient(#fff,#f7fbff); color:#111}
+  /* Top bar */
+  .topbar{
+    height:72px; background:var(--main-bg); display:flex; align-items:center; padding:12px 18px; border-bottom:3px solid rgba(0,0,0,0.05);
+  }
+  .top-left{display:flex;align-items:center;gap:12px}
+  .home-btn{width:48px;height:48px;border-radius:8px;background:white;border:2px solid #ffffff;display:flex;align-items:center;justify-content:center;font-weight:bold}
+  .search{
+    margin-left:12px; width:640px; height:48px; background:white; border:3px solid black; display:flex; align-items:center; padding:0 12px; font-size:18px;
+  }
+  .search input{border:0; outline:0; width:100%; font-size:18px}
+  .top-right{margin-left:auto; display:flex; align-items:center; gap:18px}
+  .icon-round{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:2px solid rgba(0,0,0,0.15)}
+  /* Layout */
+  .layout{display:flex; min-height:calc(100vh - 72px)}
+  .leftnav{width:var(--side-width); background:linear-gradient(#fff,#f4fbff); padding:12px 8px; border-right:4px solid rgba(0,0,0,0.03); display:flex; flex-direction:column; align-items:center; gap:18px}
+  .leftnav button{width:56px;height:56px;border-radius:10px;border:0;background:var(--primary); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 0 rgba(0,0,0,0.06); cursor:pointer}
+  .leftnav .star{width:48px;height:48px;background:white;border:2px; box-shadow:0 2px 0 rgba(0,0,0,0.06);border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .leftnav .text{font-size:12px; color:#262626; text-align:center}
+  .main{
+    flex:1; padding:18px; display:flex; gap:14px; align-items:flex-start;
+  }
+  .canvas-area{flex:1; background:white; border:4px solid rgba(0,0,0,0.07); padding:18px; position:relative; min-height:560px}
+  .title-input{border:3px solid #9b8be6; background:#e7f6f8; padding:12px; font-size:18px; color:#333; width:60%; margin-bottom:18px}
+  .slide-canvas{
+    width:100%; height:380px; border:3px solid #111; background:#fafafa; display:flex; align-items:center; justify-content:center; font-size:28px; color:#555;
+    transform-origin:center center;
+    position: relative; 
+  }
+  /* Căn chỉnh lại vị trí nút tạo và upload để giống hình ảnh */
+  .create-area {
+    position: absolute;
+    bottom: 15px;
+    left: 18px;
+    right: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .create-btn{
+    display:flex; align-items:center; gap:10px; cursor:pointer;
+  }
+  .create-circle{width:64px;height:64px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .create-label{font-size:20px; font-weight:bold}
+    
+  #uploadImageBtn {
+    background: #fff;
+    color: #111;
+    border: 3px solid #111;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .resizable{
+    position:absolute;
+    cursor:move;
+    border:2px dashed #ccc;
+    overflow:hidden;
+  }
+
+
+.resizable {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.resizable img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.resizer {
+  width: 12px; height: 12px;
+  background: #0078ff;
+  position: absolute;
+  bottom: 0; right: 0;
+  cursor: se-resize;
+}
+
+/* Style cho nút xóa hình ảnh */
+.delete-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  z-index: 10;
+  padding: 0;
+}
+
+
+  /* Right column */
+  .right-col{width:var(--right-width); display:flex; flex-direction:column; gap:12px; align-items:stretch}
+  .thumbnails{background:#f4fffd;border-left:8px solid rgba(0,0,0,0.02); padding:10px; display:flex; flex-direction:column; gap:10px; min-height:380px}
+  .thumb{height:70px;background:#fff;border:2px solid rgba(0,0,0,0.03); display:flex;align-items:center;justify-content:center; text-align:center; font-size:12px; cursor:pointer;}
+  .thumb.active{outline:3px solid #c0f7d9}
+  .thumbs-scroll{overflow:auto; flex:1}
+  .thumb-actions{display:flex; justify-content:center; padding-top:6px}
+  .dropdowns{background:var(--blue); padding:6px; display:flex; flex-direction:column; gap:8px}
+  .dropdowns button, .dropdowns select{background:white;padding:8px;border-radius:6px;border:2px solid #8fb7ff;text-align:center; font-weight:bold; cursor:pointer;}
+  /* Bottom bar */
+  .bottombar{height:56px;background:var(--primary); display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-top:2px solid rgba(0,0,0,0.05)}
+  .zoom-controls{display:flex; gap:12px; align-items:center}
+  .zoom-controls button{width:44px;height:44px;border-radius:50%;background:white;border:2px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  /* Modal */
+  .modal{position:fixed; left:0; top:0; right:0; bottom:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.4)}
+  .modal .box{background:white; padding:18px; border-radius:8px; width:420px}
+  /* helper */
+  .small{font-size:13px;color:#222}
+  .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="top-left">
+    <div class="home-btn">🏠</div>
+    <div class="search"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="11" r="6" stroke="#333" stroke-width="2" fill="none"/></svg>
+      <input id="search" placeholder="Tìm bài giảng"/>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="icon-round" title="Thông báo">🔔</div>
+    <div class="icon-round" title="Tài khoản">👤</div>
+    <div style="width:56px;height:56px;background:#fff;border-radius:8px;padding:6px;display:flex;align-items:center;justify-content:center">
+      <div class="image-section">
+        <strong style="color:#0078ff; font-size:12px">BÀI GIẢNG AI 1820</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="leftnav">
+    <button id="btn-new" title="Tạo bài giảng mới" style="background:#cfe9ff; border:2px solid #8fb7ff; font-size: 24px;">➕</button>
+    <div style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;" title="Lưu">
+        <button id="btn-save" style="background:#fff; border:2px solid #ccc; font-size: 24px;">💾</button>
+        <div class="text">Lưu</div>
+    </div>
+    <div class="sb-item" onclick='window.location.href="baigiangdaluu.html"' title="Bài giảng đã lưu" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <div class="star" style="font-size: 24px;">⭐</div>
+        <div class="text">Bài giảng đã lưu</div>
+    </div>
+    <div style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;" onclick="window.location.href='setting.html'" title="Cài đặt">
+        <button style="background:#fff; border:2px solid #ccc; font-size: 24px;">⚙️</button>
+        <div class="text">Cài đặt</div>
+    </div>
+    <div style="height:40px"></div>
+    <div style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;" title="Đăng xuất">
+        <button id="btn-logout" style="background:#fff; border:2px solid #ccc; font-size: 24px;">⤴️</button>
+        <div class="text">Đăng xuất</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="canvas-area">
+      <input id="title" class="title-input" placeholder="Nhập tên bài giảng để bắt đầu tạo" value="" />
+      <div id="slideCanvas" class="slide-canvas">
+        <div style="white-space:pre-wrap; font-size:16px; text-align:left; padding:20px; width: 90%; color:#111;">
+          <div style="background:#e7f6f8; border:3px solid #9b8be6; padding:12px; margin-bottom:15px;">
+          <strong style="font-size: 18px; color: #e10000;"></strong>
+          </div>
+          
+          <strong style="font-size: 18px; color: rgb(22, 57, 198);"></strong>
+          <br>
+          <strong style="font-size: 16px;"></strong>
+          <ul style="padding-left: 20px; margin-top: 5px;">
+            <li style="margin-bottom: 8px;">
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="create-area">
+          <div class="create-btn">
+              <div id="startCreate" class="create-circle" title="Bắt đầu tạo">↑</div>
+              <div class="create-label">Bắt đầu tạo</div>
+          </div>
+          <button id="uploadImageBtn">
+              <span style="font-size:24px;">⬆</span> Tải hình ảnh lên bài giảng
+          </button>
+      </div>
+
+        <input type="file" id="imageInput" accept="image/*" style="display:none"/>
+    </div>
+
+    <div class="right-col">
+      <div style="padding:8px 10px;font-weight:bold">Slide</div>
+      <div class="thumbnails">
+        <div class="thumbs-scroll" id="thumbs">
+          <div class="thumb active" onclick="setActive(0)"></div>
+        </div>
+        <div class="thumb-actions">
+          <button id="thumb-up">▲</button>
+          <button id="thumb-down">▼</button>
+        </div>
+      </div>
+
+      <div class="dropdowns">
+        <button id="shareBtn" style="color:white; background:#0078ff; border-color:#005fe0;">Chia sẻ ⤴</button>
+        <select id="grade">
+          <option>Khối 6</option>
+          <option>Khối 7</option>
+          <option >Khối 8</option>
+          <option>Khối 9</option>
+        </select>
+        <select id="subject">
+          <option>Toán</option>
+          <option>Vật lý</option>
+          <option>Ngữ văn</option>
+          <option>Hóa học</option>
+          <option>Công nghệ</option>
+          <option>Tiếng anh</option>
+          <option>Lịch sử</option>
+          <option>Địa lí</option>
+          <option>Sinh học</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div style="font-size:20px;padding-left:12px">Slide: <span id="slideCount">1</span></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="zoom-controls">
+      <button id="zoomOut">−</button>
+      <button id="zoomIn">＋</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="box">
+    <h3>Chia sẻ bài giảng</h3>
+    <p class="small muted">Nhập email hoặc sao chép link để chia sẻ</p>
+    <input id="shareInput" placeholder="Email/Copy link" style="width:100%;padding:8px;margin:8px 0;border:2px solid #e2eefb;border-radius:6px"/>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button id="closeModal">Hủy</button>
+      <button id="sendShare" style="background:#0078ff; color:white; border:none; border-radius:6px; padding:8px 15px;">Chia sẻ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Elements
+  const title = document.getElementById('title');
+  const startCreate = document.getElementById('startCreate');
+  const thumbs = document.getElementById('thumbs');
+  const slideCanvas = document.getElementById('slideCanvas');
+  const slideCount = document.getElementById('slideCount');
+  const modal = document.getElementById('modal');
+  const shareBtn = document.getElementById('shareBtn');
+  const closeModal = document.getElementById('closeModal');
+  const sendShare = document.getElementById('sendShare');
+  const btnLogout = document.getElementById('btn-logout');
+  const btnNew = document.getElementById('btn-new');
+  const btnSave = document.getElementById('btn-save'); 
+  const zoomIn = document.getElementById('zoomIn');
+  const zoomOut = document.getElementById('zoomOut');
+  const thumbUp = document.getElementById('thumb-up');
+  const thumbDown = document.getElementById('thumb-down');
+
+  // Image Upload Elements
+  const uploadImageBtn = document.getElementById("uploadImageBtn");
+  const imageInput = document.getElementById("imageInput");
+
+  // State
+  // Khởi tạo slide mẫu để khớp với giao diện
+  let slides = [
+  ];
+  let activeIndex = 0;
+  let scale = 1;
+
+  // --- Image Upload and Manipulation ---
+  uploadImageBtn.addEventListener("click", () => imageInput.click());
+
+  imageInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+
+    const box = document.createElement("div");
+    box.className = "resizable";
+    box.style.width = "200px";
+    box.style.height = "150px";
+    box.style.left = "50px";
+    box.style.top = "50px";
+    box.style.zIndex = 2; // Đảm bảo hình ảnh nằm trên nội dung
+
+    // Nút Xóa (Delete Button)
+    const del = document.createElement("button");
+    del.className = "delete-btn";
+    del.textContent = "×";
+    del.onclick = () => {
+      box.remove();
+    };
+
+    const resizer = document.createElement("div");
+    resizer.className = "resizer";
+
+    box.appendChild(img);
+    box.appendChild(del);
+    box.appendChild(resizer);
+    slideCanvas.appendChild(box);
+
+    // --- Drag/Resize Logic ---
+    let isDrag = false, offsetX = 0, offsetY = 0;
+    box.addEventListener("mousedown", e => {
+      if (e.target === resizer || e.target === del) return;
+      isDrag = true;
+      const rect = box.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      e.preventDefault(); 
+    });
+    document.addEventListener("mousemove", e => {
+      if (!isDrag) return;
+      const rect = slideCanvas.getBoundingClientRect();
+      const newLeft = e.clientX - rect.left - offsetX;
+      const newTop = e.clientY - rect.top - offsetY;
+
+      box.style.left = `${Math.max(0, Math.min(newLeft, rect.width - box.offsetWidth))}px`;
+      box.style.top = `${Math.max(0, Math.min(newTop, rect.height - box.offsetHeight))}px`;
+    });
+    document.addEventListener("mouseup", () => isDrag = false);
+
+    let isResize = false, startX, startY, startW, startH;
+    resizer.addEventListener("mousedown", e => {
+      e.stopPropagation();
+      isResize = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startW = parseInt(document.defaultView.getComputedStyle(box).width, 10);
+      startH = parseInt(document.defaultView.getComputedStyle(box).height, 10);
+      e.preventDefault();
+    });
+    document.addEventListener("mousemove", e => {
+      if (!isResize) return;
+      box.style.width = startW + e.clientX - startX + "px";
+      box.style.height = startH + e.clientY - startY + "px";
+    });
+    document.addEventListener("mouseup", () => isResize = false);
+
+    // Sau khi upload, áp dụng tự động căn chỉnh
+    applyAutoLayout();
+  });
+
+  // --- Lesson Management Functions ---
+  function renderThumbs() {
+    thumbs.innerHTML = '';
+    slides.forEach((s, i) => {
+      const div = document.createElement('div');
+      const thumbTitle = (s.title || `Slide ${i + 1}`);
+      div.className = 'thumb' + (i === activeIndex ? ' active' : '');
+      div.innerHTML = `<div style="width:88%;height:70px;display:flex;align-items:center;justify-content:center">${i + 1}. ${thumbTitle}</div>`;
+      div.onclick = () => { setActive(i); };
+      thumbs.appendChild(div);
+    });
+    slideCount.textContent = slides.length > 0 ? (activeIndex + 1) : 0;
+  }
+
+  function applyAutoLayout() {
+      // Hàm căn chỉnh bố cục hài hòa, đẹp mắt
+      const contentElement = slideCanvas.querySelector('div:not(.resizable)');
+      const images = slideCanvas.querySelectorAll('.resizable');
+
+      // 1. Căn chỉnh nội dung chính
+      if (contentElement) {
+          contentElement.style.width = '90%';
+          contentElement.style.margin = '0 auto';
+          contentElement.style.textAlign = 'left';
+          contentElement.style.fontSize = '16px';
+          contentElement.style.height = 'calc(100% - 40px)'; // Chiếm phần lớn diện tích
+      }
+
+      // 2. Căn chỉnh hình ảnh (ví dụ: đặt hình ảnh đầu tiên ở góc dưới bên phải)
+      if (images.length > 0) {
+          images[0].style.width = '25%';
+          images[0].style.height = '30%';
+          // Căn chỉnh vị trí so với slideCanvas
+          images[0].style.right = '20px'; 
+          images[0].style.bottom = '20px';
+          images[0].style.left = 'auto'; // Vị trí tự động
+          images[0].style.top = 'auto'; // Vị trí tự động
+      }
+      // alert("✅ Bố cục đã được căn chỉnh tự động!");
+  }
+
+  function setActive(i) {
+    activeIndex = i;
+    const s = slides[i];
+    
+    // Lưu tạm các ảnh hiện có
+    const existingImages = Array.from(slideCanvas.querySelectorAll('.resizable'));
+    
+    // Xóa nội dung cũ trên canvas
+    slideCanvas.innerHTML = '';
+    
+    // Tải nội dung slide mới
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = `
+        white-space:pre-wrap; 
+        font-size:16px; 
+        text-align:left; 
+        padding:20px; 
+        width: 90%; 
+        color:#111; 
+        height: 100%;
+        overflow: auto;
+    `;
+    contentDiv.setAttribute('contenteditable', 'true');
+    const titleBox = document.createElement('div');
+    titleBox.style.cssText = "background:#e7f6f8; border:3px solid #9b8be6; padding:12px; margin-bottom:15px;";
+    titleBox.innerHTML = `<strong style="font-size: 18px; color: #111;">${s.title || 'Slide này chưa có tiêu đề'}</strong>`;
+    
+    // Nội dung chính (có thể chỉnh sửa)
+    const editableContent = document.createElement('div');
+    editableContent.innerHTML = s.content; // Nội dung AI trả về
+    editableContent.id = 'editableContent';
+    
+    contentDiv.appendChild(titleBox);
+    contentDiv.appendChild(editableContent);
+    slideCanvas.appendChild(contentDiv);
+    slideCanvas.appendChild(contentDiv);
+    
+    // Giữ lại các ảnh hiện có khi chuyển slide (hoặc bạn có thể lưu ảnh theo từng slide)
+    existingImages.forEach(img => slideCanvas.appendChild(img));
+    
+    renderThumbs();
+    editableContent.addEventListener('input', updateSlideContent);
+  }
+function updateSlideContent(event) {
+    if (activeIndex >= 0 && activeIndex < slides.length) {
+        // Lưu nội dung HTML đã chỉnh sửa trở lại mảng slides
+        slides[activeIndex].content = event.target.innerHTML;
+    }
+}
+  async function createLesson() {
+    const lessonTitle = title.value.trim();
+    const grade = document.getElementById("grade").value;
+    const subject = document.getElementById("subject").value;
+
+    if (!lessonTitle) {
+      alert("Vui lòng nhập tên bài giảng!");
+      return;
+    }
+
+    // 1. Hiển thị trạng thái tải
+    slideCanvas.innerHTML = "<p>⏳ Đang tạo bài giảng từ AI, vui lòng chờ...</p>";
+    slides.length = 0; 
+    renderThumbs();
+
+    try {
+      // 2. GỌI ĐẾN SERVER NODE.JS CỦA BẠN (Đang chạy ở cổng 8000)
+      const response = await fetch("http://localhost:8000/generate_lesson", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: lessonTitle,
+          grade: grade,
+          subject: subject
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Lỗi HTTP: ${response.status}. Server Node.js có thể chưa chạy hoặc API Key lỗi.`);
+      }
+      
+      const data = await response.json();
+
+      if (!data.success) {
+           throw new Error(data.error || "Lỗi từ Server. Xem log Node.js để biết chi tiết.");
+      }
+
+      let rawContent = data.raw_text;
+
+      // 3. LOGIC PHÂN TÍCH CHUỖI VĂN BẢN (Slides Parser)
+      // Phân tích chuỗi văn bản thành các slide dựa trên dấu "---" (theo định dạng đã quy ước trong server.js)
+      const slideChunks = rawContent.split('---').filter(chunk => chunk.trim() !== '');
+
+      if (slideChunks.length === 0) {
+           slideCanvas.innerHTML = "<p>⚠️ AI không trả về nội dung slide theo định dạng yêu cầu. Vui lòng thử lại.</p>";
+           return;
+      }
+      
+      slideChunks.forEach(chunk => {
+          const lines = chunk.trim().split('\n');
+          // Dòng đầu tiên là tiêu đề slide
+          const slideTitle = lines[0].trim();
+          // Nội dung slide, thay thế xuống dòng bằng <br> và định dạng Markdown cơ bản (như **tô đậm**)
+          let slideContent = lines.slice(1).join('<br>').trim();
+          
+          // Định dạng cơ bản: tô đậm **...**
+          slideContent = slideContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          
+          slides.push({
+              title: slideTitle,
+              content: slideContent
+          });
+      });
+      // --- KẾT THÚC LOGIC PHÂN TÍCH ---
+
+      // 4. Hiển thị kết quả
+      activeIndex = 0;
+      setActive(0);
+      renderThumbs();
+      alert("✅ Bài giảng đã được tạo tự động thành công!");
+      
+      // Áp dụng căn chỉnh bố cục
+      applyAutoLayout();
+
+
+    } catch (err) {
+      console.error(err);
+      slideCanvas.innerHTML = `<p>❌ Lỗi khi tạo bài giảng. Vui lòng kiểm tra lại Node.js Server (Port 8000) và kết nối mạng. Chi tiết: ${err.message}</p>`;
+    }
+}
+
+  function saveLesson() {
+      const lessonTitle = title.value.trim();
+      if (!lessonTitle) {
+          alert("Vui lòng nhập tên bài giảng trước khi lưu!");
+          return;
+      }
+
+      const lectures = JSON.parse(localStorage.getItem("lectures")) || [];
+      const newLecture = {
+          title: lessonTitle,
+          grade: document.getElementById("grade").value,
+          subject: document.getElementById("subject").value,
+          slides: slides, 
+          createdAt: new Date().toLocaleDateString("vi-VN"),
+          savedAt: new Date().toLocaleDateString("vi-VN")
+      };
+
+      const existingIndex = lectures.findIndex(l => l.title === lessonTitle);
+      if (existingIndex > -1) {
+          lectures[existingIndex] = newLecture;
+          alert(`✅ Bài giảng '${lessonTitle}' đã được CẬP NHẬT vào danh sách 'Bài giảng đã lưu'!`);
+      } else {
+          lectures.push(newLecture);
+          alert(`✅ Bài giảng '${lessonTitle}' đã được LƯU vào danh sách 'Bài giảng đã lưu'!`);
+      }
+
+      localStorage.setItem("lectures", JSON.stringify(lectures));
+  }
+
+  // --- Event Listeners ---
+  startCreate.addEventListener('click', async () => {
+    startCreate.animate(
+      [{ transform: 'translateY(0)' }, { transform: 'translateY(-6px)' }, { transform: 'translateY(0)' }],
+      { duration: 300 }
+    );
+    await createLesson();
+  });
+
+  btnSave.addEventListener('click', saveLesson); 
+
+  btnNew.addEventListener('click', () => {
+    title.value = '';
+    slides.length = 0;
+    activeIndex = -1;
+    renderThumbs();
+    slideCanvas.innerHTML = 'Khu vực slide';
+  });
+
+  // Chia sẻ / Đăng xuất
+  shareBtn.addEventListener('click', () => modal.style.display = 'flex');
+  closeModal.addEventListener('click', () => modal.style.display = 'none');
+  sendShare.addEventListener('click', () => {
+    alert('Đã chia sẻ hoặc sao chép liên kết!');
+    modal.style.display = 'none';
+  });
+  btnLogout.addEventListener('click', () => {
+    if(confirm('Bạn có chắc muốn đăng xuất?')) { alert('Đã đăng xuất.'); }
+  });
+
+  // Zoom
+  function applyScale() {
+    slideCanvas.style.transform = `scale(${scale})`;
+  }
+  zoomIn.addEventListener('click', () => { scale = Math.min(scale + 0.1, 2); applyScale(); });
+  zoomOut.addEventListener('click', () => { scale = Math.max(scale - 0.1, 0.5); applyScale(); });
+
+  // Scroll Thumbnail
+  thumbUp.addEventListener('click', () => thumbs.scrollBy({ top: -80, behavior: 'smooth' }));
+  thumbDown.addEventListener('click', () => thumbs.scrollBy({ top: 80, behavior: 'smooth' }));
+
+  // Initial render
+  renderThumbs();
+  applyAutoLayout(); // Căn chỉnh slide mẫu
+</script>
+</body>
+</html>
